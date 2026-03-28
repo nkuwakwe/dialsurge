@@ -201,9 +201,8 @@ const Login = () => {
           <div className="brand-logo">
             <div className="logo-icon">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M8 6C8 5 9 4 10 4.5L22 11C23 11.5 23 13 22 13.5L10 20.5C9 21 8 20 8 19V6Z" fill="white" opacity="0.95"/>
-                <path d="M5 10C5 8.5 6.5 8 7 9L13 14L7 19C6.5 20 5 19.5 5 18V10Z" fill="white" opacity="0.5"/>
-              </svg>
+  <path d="M6.5 4C6.5 4 9 4 11 6.5C13 9 12.5 11 12.5 11L10.5 13C10.5 13 11.5 15.5 14.5 18.5C17.5 21.5 20 22.5 20 22.5L22 20.5C22 20.5 24 20 26.5 22C29 24 28.5 26.5 28.5 26.5C28.5 26.5 27.5 29 24 28C20.5 27 14 23.5 9.5 19C5 14.5 1.5 8 0.5 4.5C-0.5 1 2 0 2 0L6.5 4Z" fill="white" opacity="0.95"/>
+</svg>
             </div>
             <div className="logo-wordmark">Dial<span>Surge</span></div>
           </div>
