@@ -256,12 +256,7 @@ const Login = () => {
           <div className="absolute w-[50%] h-[35%] bottom-[20%] left-[30%] bg-teal-500/3 rounded-full blur-3xl" />
         </div>
 
-        {/* Top Branding */}
-        <div className="absolute top-7 left-10 flex items-center gap-2 opacity-60">
-          <div className="font-syne font-[700] text-[15px] text-[#64748B] tracking-[-0.3px]">
-            DialSurge
-          </div>
-        </div>
+   
 
         {/* Login Card */}
         <div className="bg-white rounded-[18px] shadow-card p-[44px_44px_36px] w-full max-w-[440px] relative z-10 border border-[rgba(226,232,240,0.7)]">
@@ -387,26 +382,58 @@ const Login = () => {
           </form>
 
           {/* Trust Signals */}
-          <div className="flex items-center justify-center gap-4 mt-5 pt-5 border-t border-[#E2E8F0]">
-            <div className="flex items-center gap-1.25 text-[11.5px] text-[#94A3B8] font-medium tracking-[0.02em]">
-              <Lock width="12" height="12" />
+          <div className="trust">
+            <div className="trust-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
               Secure Login
             </div>
-            <div className="w-0.75 h-0.75 rounded-full bg-[#E2E8F0]" />
-            <div className="flex items-center gap-1.25 text-[11.5px] text-[#94A3B8] font-medium tracking-[0.02em]">
-              <Shield width="12" height="12" />
+            <div className="trust-dot"></div>
+            <div className="trust-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
               TLS 1.3 Encrypted
             </div>
-            <div className="w-0.75 h-0.75 rounded-full bg-[#E2E8F0]" />
-            <div className="flex items-center gap-1.25 text-[11.5px] text-[#94A3B8] font-medium tracking-[0.02em]">
-              <Clock width="12" height="12" />
+            <div className="trust-dot"></div>
+            <div className="trust-item">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
               SOC 2 Compliant
             </div>
           </div>
 
+          {/* Divider */}
+          <div className="divider">or continue with</div>
+
+          {/* SSO buttons */}
+          <div className="sso-group">
+            <button className="btn-sso" onClick={() => {}}>
+              <svg width="18" height="18" viewBox="0 0 48 48">
+                <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.5 6.6 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"></path>
+                <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.5 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.5 6.6 29.5 4 24 4c-7.7 0-14.3 4.3-17.7 10.7z"></path>
+                <path fill="#4CAF50" d="M24 44c5.4 0 10.2-2 13.8-5.3l-6.4-5.4C29.5 35.2 26.9 36 24 36c-5.2 0-9.6-3.3-11.3-8H6.1C9.5 37.5 16.2 44 24 44z"></path>
+                <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4-4 5.3l6.4 5.4C41.3 35.8 44 30.4 44 24c0-1.3-.1-2.6-.4-3.9z"></path>
+              </svg>
+              Continue with Google
+            </button>
+            <button className="btn-sso" onClick={() => {}}>
+              <svg width="18" height="18" viewBox="0 0 23 23">
+                <path fill="#f3f3f3" d="M0 0h23v23H0z"></path>
+                <path fill="#f35325" d="M1 1h10v10H1z"></path>
+                <path fill="#81bc06" d="M12 1h10v10H12z"></path>
+                <path fill="#05a6f0" d="M1 12h10v10H1z"></path>
+                <path fill="#ffba08" d="M12 12h10v10H12z"></path>
+              </svg>
+              Continue with Microsoft
+            </button>
+          </div>
+
           {/* Footer */}
-          <div className="text-center mt-6 text-[14px] text-[#64748B]">
-            Don't have an account? <a href="#" className="text-blue-500 font-medium no-underline hover:underline">Sign up</a>
+          <div className="card-footer">
+            New to DialSurge? <a href="#">Create an account</a>
           </div>
         </div>
       </div>
