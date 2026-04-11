@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DialSurge — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:        #0066FF;
+  --blue-dark:   #0052CC;
+  --blue-soft:   #EEF4FF;
+  --blue-mid:    rgba(0,102,255,0.12);
+  --teal:        #0D9488;
+  --teal-soft:   #F0FDFA;
+  --teal-mid:    rgba(13,148,136,0.14);
+  --green:       #16A34A;
+  --green-soft:  #F0FDF4;
+  --amber:       #D97706;
+  --amber-soft:  #FFFBEB;
+  --red:         #DC2626;
+  --red-soft:    #FEF2F2;
+  --gray-soft:   #F8FAFC;
+  --gray-100:    #F1F5F9;
+  --gray-200:    #E2E8F0;
+  --gray-300:    #CBD5E1;
+  --gray-400:    #94A3B8;
+  --gray-500:    #64748B;
+  --gray-700:    #334155;
+  --gray-900:    #1E293B;
+  --white:       #FFFFFF;
+  --sidebar-w:   240px;
+  --header-h:    64px;
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    16px;
+  --shadow-xs:    0 1px 2px rgba(15,23,42,0.06);
+  --shadow-sm:    0 1px 3px rgba(15,23,42,0.07), 0 4px 12px rgba(15,23,42,0.05);
+  --shadow-md:    0 2px 8px rgba(15,23,42,0.08), 0 12px 28px rgba(15,23,42,0.06);
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  background: var(--gray-soft);
+  color: var(--gray-900);
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ─────────────── LAYOUT SHELL ─────────────── */
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─────────────── SIDEBAR ─────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--white);
+  border-right: 1px solid var(--gray-200);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  height: var(--header-h);
+  border-bottom: 1px solid var(--gray-200);
+  flex-shrink: 0;
+}
+
+.logo-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--blue), #0EB5B2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,102,255,0.32);
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--gray-900);
+  letter-spacing: -0.5px;
+}
+
+.logo-text span { color: var(--teal); }
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-section-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  padding: 12px 8px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--gray-500);
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+  position: relative;
+  text-decoration: none;
+}
+
+.nav-item:hover { background: var(--gray-100); color: var(--gray-900); }
+
+.nav-item.active {
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.nav-item.active .nav-icon { color: var(--blue); }
+
+.nav-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.8; }
+.nav-item.active .nav-icon { opacity: 1; }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--blue);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 100px;
+  line-height: 1.4;
+}
+
+.sidebar-footer {
+  border-top: 1px solid var(--gray-200);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.workspace-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--gray-100);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.workspace-card:hover { background: var(--gray-200); }
+
+.ws-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.ws-info { flex: 1; min-width: 0; }
+.ws-name { font-size: 12.5px; font-weight: 600; color: var(--gray-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ws-plan { font-size: 11px; color: var(--gray-400); }
+
+.btn-upgrade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--teal-soft);
+  border: 1.5px solid rgba(13,148,136,0.25);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--teal);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-upgrade:hover { background: rgba(13,148,136,0.12); border-color: rgba(13,148,136,0.4); }
+
+/* ─────────────── MAIN AREA ─────────────── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─────────────── HEADER ─────────────── */
+.header {
+  height: var(--header-h);
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 20px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-search {
+  flex: 1;
+  max-width: 420px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-400);
+}
+
+.search-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 16px 0 38px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--gray-900);
+  background: var(--gray-100);
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.search-input::placeholder { color: var(--gray-400); }
+.search-input:focus { border-color: var(--blue); background: var(--white); box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
+
+.kbd-hint {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10.5px;
+  color: var(--gray-300);
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 4px;
+  padding: 1px 5px;
+  pointer-events: none;
+}
+
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-500);
+  position: relative;
+  transition: background 0.15s, color 0.15s;
+}
+.icon-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+
+.notif-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  border: 1.5px solid white;
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 12px 4px 4px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  background: var(--white);
+}
+.user-chip:hover { background: var(--gray-100); border-color: var(--gray-300); }
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), #0EB5B2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+}
+
+.user-name { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+
+/* ─────────────── CONTENT SCROLL ─────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 28px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ─────────────── WELCOME BAR ─────────────── */
+.welcome-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.welcome-text { flex: 1; }
+
+.welcome-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  margin-bottom: 5px;
+}
+
+.welcome-sub { font-size: 14px; color: var(--gray-500); }
+.welcome-sub strong { color: var(--blue); font-weight: 600; }
+
+.welcome-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 18px;
+  height: 40px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  box-shadow: 0 1px 3px rgba(0,102,255,0.25), 0 4px 12px rgba(0,102,255,0.2);
+  white-space: nowrap;
+}
+.btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,102,255,0.3), 0 8px 20px rgba(0,102,255,0.24); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 16px;
+  height: 40px;
+  background: var(--white);
+  color: var(--gray-700);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn-secondary:hover { background: var(--gray-100); border-color: var(--gray-300); transform: translateY(-1px); }
+
+/* ─────────────── KPI CARDS ─────────────── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 22px 22px 20px;
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.18s, transform 0.15s;
+}
+.kpi-card:hover { box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.kpi-card.blue::before   { background: var(--blue); }
+.kpi-card.green::before  { background: var(--green); }
+.kpi-card.teal::before   { background: var(--teal); }
+.kpi-card.amber::before  { background: var(--amber); }
+
+.kpi-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.kpi-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.kpi-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpi-icon.blue   { background: var(--blue-soft); color: var(--blue); }
+.kpi-icon.green  { background: var(--green-soft); color: var(--green); }
+.kpi-icon.teal   { background: var(--teal-soft); color: var(--teal); }
+.kpi-icon.amber  { background: var(--amber-soft); color: var(--amber); }
+
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.kpi-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+}
+
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 100px;
+}
+
+.delta.up   { background: var(--green-soft); color: var(--green); }
+.delta.down { background: var(--red-soft); color: var(--red); }
+.delta.neutral { background: var(--gray-100); color: var(--gray-500); }
+
+.kpi-sub { color: var(--gray-400); }
+
+/* Progress bar in KPI */
+.prog-wrap {
+  margin-top: 12px;
+}
+.prog-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-bottom: 6px;
+}
+.prog-labels strong { color: var(--gray-700); font-weight: 600; }
+.prog-bar {
+  height: 7px;
+  background: var(--gray-100);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--blue), #0EB5B2);
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+/* Donut mini */
+.kpi-split {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.split-bar-wrap {
+  flex: 1;
+  height: 7px;
+  background: var(--gray-100);
+  border-radius: 100px;
+  overflow: hidden;
+  display: flex;
+}
+
+.split-seg { height: 100%; }
+
+.kpi-split-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.split-label { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray-500); }
+.split-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ─────────────── MAIN GRID (Events + Insights) ─────────────── */
+.grid-main {
+  display: grid;
+  grid-template-columns: 1fr 296px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ─────────────── SECTION HEADER ─────────────── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.2px;
+}
+
+.section-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue);
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.section-link:hover { opacity: 0.7; text-decoration: underline; }
+
+/* ─────────────── EVENT CARDS ─────────────── */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.event-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 18px 18px 16px;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  transition: box-shadow 0.18s, transform 0.15s;
+}
+.event-card:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+
+.event-status {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 100px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.event-status.active    { background: var(--green-soft); color: var(--green); }
+.event-status.paused    { background: var(--amber-soft); color: var(--amber); }
+.event-status.completed { background: var(--gray-100); color: var(--gray-500); }
+
+.event-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.event-name {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.2px;
+  line-height: 1.3;
+  padding-right: 60px;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.event-detail {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+.event-contact-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.event-prog-wrap { display: flex; flex-direction: column; gap: 5px; }
+
+.event-prog-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--gray-400);
+}
+.event-prog-labels span:last-child { font-weight: 600; color: var(--gray-700); }
+
+.event-prog-bar {
+  height: 6px;
+  background: var(--gray-100);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.event-prog-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--blue), #0EB5B2);
+}
+
+.event-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.stat-chip.coming     { background: var(--green-soft); color: #15803D; }
+.stat-chip.notcoming  { background: var(--red-soft); color: #B91C1C; }
+.stat-chip.noanswer   { background: var(--gray-100); color: var(--gray-500); }
+
+.event-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.btn-outline {
+  flex: 1;
+  height: 34px;
+  background: var(--white);
+  border: 1.5px solid var(--blue);
+  color: var(--blue);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: background 0.15s;
+}
+.btn-outline:hover { background: var(--blue-soft); }
+
+.btn-filled {
+  flex: 1;
+  height: 34px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-filled:hover { background: var(--blue-dark); transform: translateY(-1px); }
+
+/* ─────────────── AI INSIGHTS PANEL ─────────────── */
+.insights-panel {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.insights-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.insights-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.2px;
+}
+
+.insight-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  background: var(--blue-soft);
+  border-radius: 100px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--blue);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+.insight-card {
+  padding: 13px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.insight-card:hover { border-color: var(--gray-300); background: var(--gray-soft); }
+
+.insight-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.insight-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.insight-text {
+  font-size: 13px;
+  color: var(--gray-700);
+  line-height: 1.45;
+}
+
+.insight-text strong { color: var(--gray-900); font-weight: 600; }
+
+.insight-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 10.5px;
+  font-weight: 600;
+  width: fit-content;
+  margin-left: 17px;
+}
+
+.cta-insight {
+  background: var(--teal-soft);
+  border: 1.5px solid rgba(13,148,136,0.22);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.cta-insight-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--teal);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cta-insight-text {
+  font-size: 13px;
+  color: #134E4A;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.cta-insight-text strong { font-weight: 700; }
+
+.btn-teal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-teal:hover { background: #0F766E; transform: translateY(-1px); }
+
+/* Mini sparkline */
+.sparkline { color: var(--gray-300); margin-top: 4px; }
+
+/* ─────────────── ACTIVITY TABLE ─────────────── */
+.table-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+.table-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 16px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.table-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: var(--green-soft);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-live 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.table-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-500);
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-chip:hover { border-color: var(--gray-300); color: var(--gray-700); background: var(--gray-100); }
+.filter-chip.active { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--gray-soft);
+  border-bottom: 1px solid var(--gray-200);
+  white-space: nowrap;
+}
+
+thead th:first-child { padding-left: 22px; }
+thead th:last-child  { padding-right: 22px; }
+
+tbody tr {
+  border-bottom: 1px solid var(--gray-100);
+  transition: background 0.12s;
+  cursor: pointer;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--gray-soft); }
+tbody tr:nth-child(even) { background: rgba(248,250,252,0.6); }
+tbody tr:nth-child(even):hover { background: var(--gray-100); }
+
+td {
+  padding: 13px 16px;
+  font-size: 13.5px;
+  color: var(--gray-700);
+  vertical-align: middle;
+}
+
+td:first-child { padding-left: 22px; }
+td:last-child  { padding-right: 22px; }
+
+.contact-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contact-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.contact-name { font-weight: 600; color: var(--gray-900); font-size: 13.5px; }
+.contact-phone { font-size: 11.5px; color: var(--gray-400); }
+
+.phone-cell { font-size: 13px; color: var(--gray-500); font-variant-numeric: tabular-nums; }
+
+.event-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-pill.coming      { background: var(--green-soft); color: #15803D; }
+.status-pill.not-coming  { background: var(--red-soft); color: #B91C1C; }
+.status-pill.no-answer   { background: var(--gray-100); color: var(--gray-500); }
+.status-pill.in-progress { background: var(--blue-soft); color: var(--blue); }
+.status-pill.calling     { background: var(--amber-soft); color: var(--amber); }
+
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-pill.calling .status-dot { animation: pulse-live 1.2s infinite; }
+
+.duration-cell { color: var(--gray-500); font-variant-numeric: tabular-nums; font-size: 13px; }
+
+.summary-cell {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--gray-600);
+  font-size: 12.5px;
+  font-style: italic;
+}
+
+.ts-cell { color: var(--gray-400); font-size: 12px; white-space: nowrap; }
+
+.table-footer {
+  padding: 14px 22px;
+  border-top: 1px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table-count { font-size: 12.5px; color: var(--gray-400); }
+
+/* ─────────────── SCROLLBAR ─────────────── */
+.content::-webkit-scrollbar { width: 5px; }
+.content::-webkit-scrollbar-track { background: transparent; }
+.content::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 10px; }
+
+/* ─────────────── ANIMATIONS ─────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.kpi-card     { animation: fadeUp 0.4s ease both; }
+.kpi-card:nth-child(1) { animation-delay: 0.05s; }
+.kpi-card:nth-child(2) { animation-delay: 0.10s; }
+.kpi-card:nth-child(3) { animation-delay: 0.15s; }
+.kpi-card:nth-child(4) { animation-delay: 0.20s; }
+
+.event-card:nth-child(1) { animation: fadeUp 0.4s 0.15s ease both; }
+.event-card:nth-child(2) { animation: fadeUp 0.4s 0.22s ease both; }
+.event-card:nth-child(3) { animation: fadeUp 0.4s 0.29s ease both; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M6 4C6 3.2 7 2.5 7.8 3L21 10.5C21.8 11 21.8 12 21 12.5L7.8 20C7 20.5 6 19.8 6 19V4Z" fill="white" opacity="0.95"/>
+          <path d="M3 8C3 6.9 4.2 6.3 5 7L10 10.5L5 14C4.2 14.7 3 14.1 3 13V8Z" fill="white" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="logo-text">Dial<span>Surge</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+
+      <a class="nav-item active" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Dashboard
+      </a>
+
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Events
+        <span class="nav-badge">3</span>
+      </a>
+
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Contacts
+      </a>
+
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.69 19a19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 5.27 5.27l1.28-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        Call Logs
+      </a>
+
+      <div class="nav-section-label">Analytics</div>
+
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 2v10l4.5 4.5"/><circle cx="19" cy="5" r="3"/>
+        </svg>
+        AI Reports
+      </a>
+
+      <div class="nav-section-label">Account</div>
+
+      <a class="nav-item" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+        </svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="workspace-card">
+        <div class="ws-avatar">GBC</div>
+        <div class="ws-info">
+          <div class="ws-name">Grace Bible Church</div>
+          <div class="ws-plan">Free Plan · 3/5 Events</div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <button class="btn-upgrade">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        Upgrade Plan
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <div class="main">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-search">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input class="search-input" type="text" placeholder="Search contacts, events, call logs…">
+        <span class="kbd-hint">⌘K</span>
+      </div>
+
+      <div class="header-right">
+        <button class="icon-btn" title="Help">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+        <button class="icon-btn" title="Notifications">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <div class="notif-dot"></div>
+        </button>
+
+        <div class="user-chip">
+          <div class="user-avatar">PJ</div>
+          <span class="user-name">Pastor James</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- 1. WELCOME BAR -->
+      <div class="welcome-bar">
+        <div class="welcome-text">
+          <div class="welcome-title">Good morning, Pastor James 👋</div>
+          <div class="welcome-sub">You have <strong>3 active events</strong> and <strong>412 calls</strong> scheduled for today. Let's make an impact.</div>
+        </div>
+        <div class="welcome-actions">
+          <button class="btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            Import Contacts
+          </button>
+          <button class="btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            New Event
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. KPI ROW -->
+      <div class="kpi-row">
+
+        <!-- Total Contacts -->
+        <div class="kpi-card blue">
+          <div class="kpi-header">
+            <span class="kpi-label">Total Contacts</span>
+            <div class="kpi-icon blue">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value">2,847</div>
+          <div class="kpi-meta">
+            <span class="delta up">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>
+              +124
+            </span>
+            <span class="kpi-sub">this week</span>
+          </div>
+        </div>
+
+        <!-- Calls Made Today -->
+        <div class="kpi-card teal">
+          <div class="kpi-header">
+            <span class="kpi-label">Calls Made Today</span>
+            <div class="kpi-icon teal">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.72 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l1.02-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value">412</div>
+          <div class="prog-wrap">
+            <div class="prog-labels"><span>of <strong>850</strong> scheduled</span><span><strong>48.5%</strong></span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:48.5%"></div></div>
+          </div>
+        </div>
+
+        <!-- Confirmed -->
+        <div class="kpi-card green">
+          <div class="kpi-header">
+            <span class="kpi-label">Confirmed Attending</span>
+            <div class="kpi-icon green">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value">318</div>
+          <div class="kpi-meta">
+            <span class="delta up">37.4%</span>
+            <span class="kpi-sub">response rate</span>
+          </div>
+        </div>
+
+        <!-- No Answer / Declined -->
+        <div class="kpi-card amber">
+          <div class="kpi-header">
+            <span class="kpi-label">Declined &amp; No Answer</span>
+            <div class="kpi-icon amber">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 5a10.94 10.94 0 0 0-2.06 2.89 11 11 0 0 0 4.31 5.96"/>
+                <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 0 3.29 6.61"/><path d="M10.71 18.95A16 16 0 0 0 22.56 15"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value" style="font-size:22px; margin-bottom:10px;">94 · 440</div>
+          <div class="kpi-split">
+            <div class="split-bar-wrap">
+              <div class="split-seg" style="width:17.6%; background:#DC2626; border-radius:100px 0 0 100px;"></div>
+              <div class="split-seg" style="width:82.4%; background:#E2E8F0; border-radius:0 100px 100px 0;"></div>
+            </div>
+            <div class="kpi-split-labels">
+              <div class="split-label"><div class="split-dot" style="background:#DC2626"></div>Declined</div>
+              <div class="split-label"><div class="split-dot" style="background:#CBD5E1"></div>No ans.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3+5. EVENTS + INSIGHTS (2-col grid) -->
+      <div class="grid-main">
+
+        <!-- LEFT: Events -->
+        <div>
+          <div class="section-header">
+            <span class="section-title">Your Active Events</span>
+            <a class="section-link" href="#">View All →</a>
+          </div>
+
+          <div class="events-grid">
+
+            <!-- Event 1 -->
+            <div class="event-card">
+              <span class="event-status active">Active</span>
+              <div class="event-icon" style="background:#EEF4FF;">🙏</div>
+              <div class="event-name">Easter Sunday Service</div>
+              <div class="event-meta">
+                <div class="event-detail">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Sun, Apr 20, 2025 · 9:00 AM
+                </div>
+                <div class="event-detail">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Grace Bible Church, Abuja
+                </div>
+              </div>
+              <div class="event-contact-badge">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                850 contacts
+              </div>
+              <div class="event-prog-wrap">
+                <div class="event-prog-labels"><span>Calls made</span><span>48%</span></div>
+                <div class="event-prog-bar"><div class="event-prog-fill" style="width:48%"></div></div>
+              </div>
+              <div class="event-stats">
+                <span class="stat-chip coming">✅ 318 Coming</span>
+                <span class="stat-chip notcoming">❌ 94</span>
+                <span class="stat-chip noanswer">📵 440</span>
+              </div>
+              <div class="event-actions">
+                <button class="btn-outline">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Manage
+                </button>
+                <button class="btn-filled">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07"/><path d="M1 1l22 22"/></svg>
+                  Start Calling
+                </button>
+              </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="event-card">
+              <span class="event-status paused">Paused</span>
+              <div class="event-icon" style="background:#FFFBEB;">⚡</div>
+              <div class="event-name">Youth Conference 2025</div>
+              <div class="event-meta">
+                <div class="event-detail">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Sat, May 10, 2025 · 10:00 AM
+                </div>
+                <div class="event-detail">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Youth Center, Garki II
+                </div>
+              </div>
+              <div class="event-contact-badge">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                560 contacts
+              </div>
+              <div class="event-prog-wrap">
+                <div class="event-prog-labels"><span>Calls made</span><span>39%</span></div>
+                <div class="event-prog-bar"><div class="event-prog-fill" style="width:39%"></div></div>
+              </div>
+              <div class="event-stats">
+                <span class="stat-chip coming">✅ 142 Coming</span>
+                <span class="stat-chip notcoming">❌ 78</span>
+                <span class="stat-chip noanswer">📵 340</span>
+              </div>
+              <div class="event-actions">
+                <button class="btn-outline">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Manage
+                </button>
+                <button class="btn-filled">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Resume
+                </button>
+              </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="event-card">
+              <span class="event-status active">Active</span>
+              <div class="event-icon" style="background:#F0FDF4;">🎗️</div>
+              <div class="event-name">Annual Fundraiser Gala</div>
+              <div class="event-meta">
+                <div class="event-detail">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Fri, Jun 6, 2025 · 6:30 PM
+                </div>
+                <div class="event-detail">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Transcorp Hilton, Maitama
+                </div>
+              </div>
+              <div class="event-contact-badge">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                320 contacts
+              </div>
+              <div class="event-prog-wrap">
+                <div class="event-prog-labels"><span>Calls made</span><span>22%</span></div>
+                <div class="event-prog-bar"><div class="event-prog-fill" style="width:22%"></div></div>
+              </div>
+              <div class="event-stats">
+                <span class="stat-chip coming">✅ 49 Coming</span>
+                <span class="stat-chip notcoming">❌ 22</span>
+                <span class="stat-chip noanswer">📵 249</span>
+              </div>
+              <div class="event-actions">
+                <button class="btn-outline">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Manage
+                </button>
+                <button class="btn-filled">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07"/></svg>
+                  Start Calling
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- RIGHT: AI Insights Panel -->
+        <div class="insights-panel">
+          <div class="insights-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2" stroke-linecap="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span class="insights-title">AI Insights</span>
+            <span class="insight-badge">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg>
+              Live
+            </span>
+          </div>
+
+          <!-- Insight 1 -->
+          <div class="insight-card">
+            <div class="insight-card-header">
+              <div class="insight-dot" style="background:#0066FF"></div>
+              <div class="insight-text">
+                <strong>Best call window today:</strong> Contacts are most responsive between <strong>5:00 PM – 7:00 PM</strong> based on 30-day patterns.
+              </div>
+            </div>
+            <span class="insight-tag" style="background:#EEF4FF; color:#0066FF;">
+              ⏰ Timing
+            </span>
+          </div>
+
+          <!-- Insight 2 -->
+          <div class="insight-card">
+            <div class="insight-card-header">
+              <div class="insight-dot" style="background:#D97706"></div>
+              <div class="insight-text">
+                <strong>23 contacts</strong> have been unreached after 3 call attempts — consider an SMS fallback to boost reach.
+              </div>
+            </div>
+            <span class="insight-tag" style="background:#FFFBEB; color:#D97706;">
+              📱 SMS Fallback
+            </span>
+          </div>
+
+          <!-- Insight 3 -->
+          <div class="insight-card">
+            <div class="insight-card-header">
+              <div class="insight-dot" style="background:#16A34A"></div>
+              <div class="insight-text">
+                <strong>Easter Sunday</strong> has your highest confirmation rate at <strong>48%</strong> — above your 37% average.
+              </div>
+            </div>
+            <span class="insight-tag" style="background:#F0FDF4; color:#16A34A;">
+              📈 Top Event
+            </span>
+          </div>
+
+          <!-- Suggested Action -->
+          <div class="cta-insight">
+            <div class="cta-insight-label">✦ Suggested Next Action</div>
+            <div class="cta-insight-text">
+              Resume calling for <strong>Youth Conference</strong> — <strong>340 contacts</strong> are still unreached and the event is 30 days away.
+            </div>
+            <button class="btn-teal">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Resume Campaign
+            </button>
+          </div>
+
+          <!-- Mini stat -->
+          <div style="display:flex; flex-direction:column; gap:7px; padding-top:4px; border-top:1px solid var(--gray-100); margin-top:2px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11.5px; color:var(--gray-400); font-weight:500;">AI Calls Success Rate</span>
+              <span style="font-size:13px; font-weight:700; color:var(--teal);">73.2%</span>
+            </div>
+            <div class="prog-bar"><div class="prog-fill" style="width:73.2%; background:linear-gradient(90deg,var(--teal),#0EB5B2)"></div></div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="font-size:11px; color:var(--gray-400);">Avg call duration: 1m 42s</span>
+              <span style="font-size:11px; color:var(--gray-400);">↑ vs last week</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 4. ACTIVITY TABLE -->
+      <div class="table-card">
+        <div class="table-header-row">
+          <div class="table-title-group">
+            <span class="section-title">Recent Call Activity</span>
+            <div class="live-chip">
+              <div class="live-dot"></div>
+              Live
+            </div>
+          </div>
+          <div class="table-filters">
+            <div class="filter-chip active">All Calls</div>
+            <div class="filter-chip">Coming</div>
+            <div class="filter-chip">Not Coming</div>
+            <div class="filter-chip">No Answer</div>
+            <div class="filter-chip">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+              Filter
+            </div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Contact</th>
+              <th>Phone</th>
+              <th>Event</th>
+              <th>Status</th>
+              <th>Duration</th>
+              <th>AI Summary</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="contact-cell">
+                  <div class="contact-avatar" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)">AO</div>
+                  <div>
+                    <div class="contact-name">Adaeze Okonkwo</div>
+                    <div class="contact-phone">Member · 3 yrs</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">+234 803 441 7821</td>
+              <td><span class="event-pill">Easter Sunday</span></td>
+              <td><span class="status-pill coming"><div class="status-dot"></div>Coming</span></td>
+              <td class="duration-cell">2m 14s</td>
+              <td class="summary-cell">"Said she'll attend with her husband and kids"</td>
+              <td class="ts-cell">9:42 AM</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="contact-cell">
+                  <div class="contact-avatar" style="background:linear-gradient(135deg,#0D9488,#06B6D4)">BN</div>
+                  <div>
+                    <div class="contact-name">Biodun Nwosu</div>
+                    <div class="contact-phone">New Member</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">+234 815 220 3345</td>
+              <td><span class="event-pill">Youth Conf.</span></td>
+              <td><span class="status-pill calling"><div class="status-dot"></div>In Progress</span></td>
+              <td class="duration-cell">0m 48s</td>
+              <td class="summary-cell">Call ongoing — AI agent engaged</td>
+              <td class="ts-cell">9:48 AM</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="contact-cell">
+                  <div class="contact-avatar" style="background:linear-gradient(135deg,#DC2626,#F97316)">EI</div>
+                  <div>
+                    <div class="contact-name">Emeka Ihejirika</div>
+                    <div class="contact-phone">Donor · VIP</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">+234 902 671 0034</td>
+              <td><span class="event-pill">Fundraiser Gala</span></td>
+              <td><span class="status-pill not-coming"><div class="status-dot"></div>Not Coming</span></td>
+              <td class="duration-cell">1m 02s</td>
+              <td class="summary-cell">"Travelling abroad that weekend, sends regards"</td>
+              <td class="ts-cell">9:31 AM</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="contact-cell">
+                  <div class="contact-avatar" style="background:linear-gradient(135deg,#0066FF,#0EB5B2)">FD</div>
+                  <div>
+                    <div class="contact-name">Fatima Danjuma</div>
+                    <div class="contact-phone">Member · 1 yr</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">+234 708 119 5560</td>
+              <td><span class="event-pill">Easter Sunday</span></td>
+              <td><span class="status-pill coming"><div class="status-dot"></div>Coming</span></td>
+              <td class="duration-cell">1m 47s</td>
+              <td class="summary-cell">"Confirmed, also inviting her sister to join"</td>
+              <td class="ts-cell">9:25 AM</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="contact-cell">
+                  <div class="contact-avatar" style="background:linear-gradient(135deg,#7C3AED,#A855F7)">CA</div>
+                  <div>
+                    <div class="contact-name">Chidi Anozie</div>
+                    <div class="contact-phone">Volunteer</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">+234 812 554 8890</td>
+              <td><span class="event-pill">Youth Conf.</span></td>
+              <td><span class="status-pill no-answer"><div class="status-dot"></div>No Answer</span></td>
+              <td class="duration-cell">—</td>
+              <td class="summary-cell">Voicemail left, retry scheduled 5 PM</td>
+              <td class="ts-cell">9:18 AM</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="contact-cell">
+                  <div class="contact-avatar" style="background:linear-gradient(135deg,#D97706,#F59E0B)">RO</div>
+                  <div>
+                    <div class="contact-name">Ruth Oyelaran</div>
+                    <div class="contact-phone">Member · 5 yrs</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">+234 901 337 2241</td>
+              <td><span class="event-pill">Easter Sunday</span></td>
+              <td><span class="status-pill coming"><div class="status-dot"></div>Coming</span></td>
+              <td class="duration-cell">2m 31s</td>
+              <td class="summary-cell">"Very excited, will lead the choir that morning"</td>
+              <td class="ts-cell">9:10 AM</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="contact-cell">
+                  <div class="contact-avatar" style="background:linear-gradient(135deg,#16A34A,#0D9488)">KM</div>
+                  <div>
+                    <div class="contact-name">Kelechi Maduka</div>
+                    <div class="contact-phone">Elder</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">+234 706 882 1134</td>
+              <td><span class="event-pill">Fundraiser Gala</span></td>
+              <td><span class="status-pill coming"><div class="status-dot"></div>Coming</span></td>
+              <td class="duration-cell">3m 08s</td>
+              <td class="summary-cell">"Pledged ₦250k, wants table for 10 guests"</td>
+              <td class="ts-cell">8:54 AM</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="contact-cell">
+                  <div class="contact-avatar" style="background:linear-gradient(135deg,#475569,#64748B)">LU</div>
+                  <div>
+                    <div class="contact-name">Lara Uzodimma</div>
+                    <div class="contact-phone">New Member</div>
+                  </div>
+                </div>
+              </td>
+              <td class="phone-cell">+234 813 990 4478</td>
+              <td><span class="event-pill">Easter Sunday</span></td>
+              <td><span class="status-pill no-answer"><div class="status-dot"></div>No Answer</span></td>
+              <td class="duration-cell">—</td>
+              <td class="summary-cell">No response, 2nd attempt queued</td>
+              <td class="ts-cell">8:41 AM</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="table-footer">
+          <span class="table-count">Showing 8 of 412 calls today</span>
+          <a class="section-link" href="#">View Full Log →</a>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+  // Animate progress bars on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const fills = document.querySelectorAll('.prog-fill, .event-prog-fill');
+    fills.forEach(el => {
+      const target = el.style.width;
+      el.style.width = '0%';
+      requestAnimationFrame(() => {
+        setTimeout(() => { el.style.width = target; }, 100);
+      });
+    });
+
+    // Nav item interaction
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Filter chip interaction
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+  });
+</script>
+</body>
+</html>
